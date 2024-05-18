@@ -1,4 +1,5 @@
-﻿using API.DAL.Entities;
+﻿using API.DAL.Configurations;
+using API.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +16,12 @@ public class DocStorageDbContext : IdentityDbContext<User, Role, Guid>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        //builder.ApplyConfiguration(new UserConfiguration());
+        builder.ApplyConfiguration(new UserConfiguration());
+        builder.ApplyConfiguration(new PublicationConfiguration());
+        builder.ApplyConfiguration(new DocumentConfiguration());
 
         var roles = new IdentityRole[] 
         {
-            new() { Name = "Guest", NormalizedName = "GUEST" },
             new() { Name = "Student", NormalizedName = "STUDENT" },
             new() { Name = "Teacher", NormalizedName = "TEACHER" },
             new() { Name = "Administrator", NormalizedName = "ADMINISTRATOR" }
