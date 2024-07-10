@@ -1,5 +1,14 @@
+import { Outlet } from 'react-router-dom'
+import { UserProvider } from './context/Context'
+
 const App = () => {
-  return <div className='App'>App</div>
+  return (
+    <>
+      <UserProvider>
+        <Outlet />
+      </UserProvider>
+    </>
+  )
 }
 
 export default App
