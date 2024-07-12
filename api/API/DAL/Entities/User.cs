@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿namespace API.DAL.Entities;
 
-namespace API.DAL.Entities;
-
-public class User : IdentityUser<Guid>
+public class User
 {
+    public Guid Id { get; set; }
     public string Name { get; set; } = null!;
     public string Surname { get; set; } = null!;
     public string? Patronymic { get; set; }
+    public string? Email { get; set; }
     public string? Description { get; set; } 
     public DateTime CreationDate { get; set; }
-    public ICollection<Publication>? Publications { get; set; }
-    public ICollection<Publication>? Confirmations { get; set; } 
+    public bool IsEmailConfirmed { get; set; } = false;
+    public Guid? RoleId { get; set; }
+    public Role? Role { get; set; }
 }

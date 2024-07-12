@@ -1,5 +1,5 @@
 ﻿using API.BLL.DTOs.AccountDTOs;
-using API.BLL.Services.Interfaces;
+using API.BLL.Services.Implementations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,29 +9,38 @@ namespace API.Controllers;
 [Route("api/account")]
 public class AccountController : ControllerBase
 {
-    private readonly IBaseAccountService _baseAccountService;
+    private readonly AccountService _ccountService;
 
-    public AccountController(IBaseAccountService baseAccountService)
+    public AccountController(AccountService AccountService)
     {
-        _baseAccountService = baseAccountService;
+        _ccountService = AccountService;
     }
 
     [HttpPost("register")]
     public async Task<IActionResult> RegisterAsStudent([FromBody] RegisterDto registerDto)
     {
-        var registrationResult = await _baseAccountService.RegisterAsync(registerDto);
-        return registrationResult.Result ? 
-            Ok(registrationResult.Data) : 
+        var registrationResult = await _ccountService.RegisterAsync(registerDto);
+        return registrationResult.Result ?
+            Ok(registrationResult.Data) :
             BadRequest(new { Error = registrationResult.ErrorMessage });
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto LoginDto)
     {
-        var loginResult = await _baseAccountService.LoginAsync(LoginDto);
-        return loginResult.Result ? 
-            Ok(loginResult.Data) : 
-            Unauthorized(new { Error = loginResult.ErrorMessage });
+        var loginResult = await _ccountService.LoginAsync(LoginDto);
+        return loginResult.Result ?
+            Ok(loginResult.Data) :
+            BadRequest(new { Error = loginResult.ErrorMessage });
+    }
+
+    [HttpPost("confirm-email")]
+    public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailDto confirmEmailDto)
+    {
+        var emailConfirmationResult = await _ccountService.ConfirmEmailAsync(confirmEmailDto);
+        return emailConfirmationResult.Result ?
+            Ok(emailConfirmationResult.Data) :
+            Unauthorized(new { Error = emailConfirmationResult.ErrorMessage });
     }
 
     [Authorize(Roles = "Student")]

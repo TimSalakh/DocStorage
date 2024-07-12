@@ -1,13 +1,12 @@
 ﻿using API.DAL.Contexts;
 using API.DAL.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.DAL.Repositories.Implementations;
 
 public class BaseRepository<TEntity> : IBaseRepository<TEntity> 
     where TEntity : class
 {
-    private readonly DocStorageDbContext _context;
+    protected readonly DocStorageDbContext _context;
 
     public BaseRepository(DocStorageDbContext context)
     {
@@ -22,7 +21,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity>
 
     public async Task DeleteAsync(Guid id)
     {
-        var entity = await GetByIdAsync(id);
+        var entity = await FindByIdAsync(id);
         if (entity == null)
             return;
         _context.Set<TEntity>().Remove(entity);
@@ -34,12 +33,11 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity>
         return await Task.Run(() =>
         {
             return _context.Set<TEntity>()
-            .AsQueryable()
-            .AsNoTracking();
+            .AsQueryable();
         });
     }
 
-    public async Task<TEntity?> GetByIdAsync(Guid id)
+    public async Task<TEntity?> FindByIdAsync(Guid id)
     {
         return await _context.Set<TEntity>().FindAsync(id);
     }

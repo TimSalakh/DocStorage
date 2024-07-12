@@ -1,13 +1,14 @@
 ﻿using API.DAL.Configurations;
 using API.DAL.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.DAL.Contexts;
 
-public class DocStorageDbContext : IdentityDbContext<User, Role, Guid>
+public class DocStorageDbContext : DbContext
 {
     public DbSet<User> User { get; set; }
+    public DbSet<Role> Role { get; set; }
+    public DbSet<ConfirmationCode> ConfirmationCode { get; set; }
 
     public DocStorageDbContext(DbContextOptions<DocStorageDbContext> options)
         : base(options) { }
@@ -16,7 +17,16 @@ public class DocStorageDbContext : IdentityDbContext<User, Role, Guid>
     {
         base.OnModelCreating(builder);
         builder.ApplyConfiguration(new UserConfiguration());
-        builder.ApplyConfiguration(new PublicationConfiguration());
-        builder.ApplyConfiguration(new DocumentConfiguration());
+        builder.ApplyConfiguration(new RoleConfiguration());
+        builder.ApplyConfiguration(new ConfirmationCodeConfiguration());
+
+        var roles = new List<Role>()
+        {
+            new Role { Id = Guid.NewGuid(), Name = "Student" },
+            new Role { Id = Guid.NewGuid(), Name = "Teacher" },
+            new Role { Id = Guid.NewGuid(), Name = "Admin" }
+        };
+
+        builder.Entity<Role>().HasData(roles);
     }
 }

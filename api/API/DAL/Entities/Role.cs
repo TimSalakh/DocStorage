@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿namespace API.DAL.Entities;
 
-namespace API.DAL.Entities;
-
-public class Role : IdentityRole<Guid>
-{ }
+public class Role
+{ 
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public ICollection<User>? Users { get; set; } = null;
+}

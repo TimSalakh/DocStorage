@@ -18,16 +18,6 @@ builder.Services.AddDbContext<DocStorageDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddIdentity<User, Role>(options =>
-{
-    options.User.RequireUniqueEmail = true;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 10;
-}).AddEntityFrameworkStores<DocStorageDbContext>();
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -48,10 +38,16 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddScoped<IBaseRepository<User>, BaseRepository<User>>();
-builder.Services.AddScoped<IBaseRepository<Document>, BaseRepository<Document>>();
-builder.Services.AddScoped<IBaseRepository<Publication>, BaseRepository<Publication>>();
+//builder.Services.AddScoped<IBaseRepository<Document>, BaseRepository<Document>>();
+//builder.Services.AddScoped<IBaseRepository<Publication>, BaseRepository<Publication>>();
+builder.Services.AddScoped<IBaseRepository<ConfirmationCode>, BaseRepository<ConfirmationCode>>();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<RoleRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IBaseAccountService, BaseAccountService>();
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddScoped<TwoStepAuthService>();
+builder.Services.AddScoped<EmailComposerService>();
 
 builder.Services.AddControllers();
 builder.Services.AddCors();

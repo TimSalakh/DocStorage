@@ -10,7 +10,6 @@ const RegisterPage = () => {
     surname: '',
     patronymic: '',
     email: '',
-    password: '',
     isTeacher: false
   })
 
@@ -64,16 +63,6 @@ const RegisterPage = () => {
             name='email'
             type='email'
             value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor='password'>Пароль</label>
-          <input
-            className='border border-black'
-            name='password'
-            type='password'
-            value={formData.password}
             onChange={handleChange}
           />
         </div>
