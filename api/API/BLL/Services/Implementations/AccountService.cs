@@ -4,24 +4,25 @@ using API.BLL.Mappers;
 using API.BLL.Services.Interfaces;
 using API.Controllers;
 using API.DAL.Repositories.Implementations;
+using API.DAL.Repositories.Interfaces;
 using System.Security.Claims;
 
 namespace API.BLL.Services.Implementations;
 
 public class AccountService
 {
-    private readonly UserRepository _userRepository;
-    private readonly RoleRepository _roleRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly IRoleRepository _roleRepository;
     private readonly ILogger<AccountController> _logger;
     private readonly ITokenService _tokenService;
-    private readonly TwoStepAuthService _twoStepAuthService;
+    private readonly ITwoStepAuthService _twoStepAuthService;
 
     public AccountService(
-        UserRepository userRepository,
-        RoleRepository roleRepository,
+        IUserRepository userRepository,
+        IRoleRepository roleRepository,
         ITokenService tokenService,
         ILogger<AccountController> logger,
-        TwoStepAuthService twoStepAuthService)
+        ITwoStepAuthService twoStepAuthService)
     {
         _userRepository = userRepository;
         _roleRepository = roleRepository;

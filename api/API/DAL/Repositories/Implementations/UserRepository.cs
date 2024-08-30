@@ -1,10 +1,11 @@
 ﻿using API.DAL.Contexts;
 using API.DAL.Entities;
+using API.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.DAL.Repositories.Implementations;
 
-public class UserRepository : BaseRepository<User>
+public class UserRepository : BaseRepository<User>, IUserRepository
 {
     public UserRepository(DocStorageDbContext context) 
         : base(context) { }

@@ -6,7 +6,7 @@ using API.DAL.Repositories.Interfaces;
 
 namespace API.BLL.Services.Implementations;
 
-public class TwoStepAuthService
+public class TwoStepAuthService : ITwoStepAuthService
 {
     private readonly IConfirmationCodeRepository _confirmationCodeRepoRepository;
     private readonly IEmailService _emailService;

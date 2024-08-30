@@ -41,11 +41,13 @@ builder.Services.AddScoped<IBaseRepository<User>, BaseRepository<User>>();
 //builder.Services.AddScoped<IBaseRepository<Document>, BaseRepository<Document>>();
 //builder.Services.AddScoped<IBaseRepository<Publication>, BaseRepository<Publication>>();
 builder.Services.AddScoped<IBaseRepository<ConfirmationCode>, BaseRepository<ConfirmationCode>>();
-builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<RoleRepository>();
+builder.Services.AddScoped<IBaseRepository<Role>, BaseRepository<Role>>();
+builder.Services.AddScoped<IBaseRepository<User>, BaseRepository<User>>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IConfirmationCodeRepository, ConfirmationCodeRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<TwoStepAuthService>();
+builder.Services.AddScoped<ITwoStepAuthService, TwoStepAuthService>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 

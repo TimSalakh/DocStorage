@@ -13,7 +13,7 @@ public class TwoStepAuthServiceTests
     private readonly Mock<IConfirmationCodeRepository> _mockConfirmationCodeRepo;
     private readonly Mock<IEmailService> _mockEmailService;
     private readonly Mock<ILogger<AccountController>> _mockLogger;
-    private readonly TwoStepAuthService _service;
+    private readonly TwoStepAuthService _twoStepAuthService;
 
     public TwoStepAuthServiceTests()
     {
@@ -21,7 +21,7 @@ public class TwoStepAuthServiceTests
         _mockEmailService = new Mock<IEmailService>();
         _mockLogger = new Mock<ILogger<AccountController>>();
 
-        _service = new TwoStepAuthService(
+        _twoStepAuthService = new TwoStepAuthService(
             _mockConfirmationCodeRepo.Object, 
             _mockEmailService.Object, 
             _mockLogger.Object);
@@ -42,7 +42,7 @@ public class TwoStepAuthServiceTests
             .ReturnsAsync(lastCode);
 
         // Act
-        var result = await _service.GenerateCodeAsync(user);
+        var result = await _twoStepAuthService.GenerateCodeAsync(user);
 
         // Assert
         Assert.True(result.Result);
@@ -63,7 +63,7 @@ public class TwoStepAuthServiceTests
             .ReturnsAsync(lastCode);
 
         // Act
-        var result = await _service.GenerateCodeAsync(user);
+        var result = await _twoStepAuthService.GenerateCodeAsync(user);
 
         // Assert
         Assert.True(result.Result);
@@ -85,7 +85,7 @@ public class TwoStepAuthServiceTests
             .ReturnsAsync(lastCode);
 
         // Act
-        var result = await _service.MatchCodesAsync(user, 1234);
+        var result = await _twoStepAuthService.MatchCodesAsync(user, 1234);
 
         // Assert
         Assert.True(result.Result);
@@ -107,7 +107,7 @@ public class TwoStepAuthServiceTests
             .ReturnsAsync(lastCode);
 
         // Act
-        var result = await _service.MatchCodesAsync(user, 1234);
+        var result = await _twoStepAuthService.MatchCodesAsync(user, 1234);
 
         // Assert
         Assert.True(result.Result);

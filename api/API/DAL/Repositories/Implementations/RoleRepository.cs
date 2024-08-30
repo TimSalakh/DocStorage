@@ -1,10 +1,11 @@
 ﻿using API.DAL.Contexts;
 using API.DAL.Entities;
+using API.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.DAL.Repositories.Implementations;
 
-public class RoleRepository : BaseRepository<Role>
+public class RoleRepository : BaseRepository<Role>, IRoleRepository
 {
     public RoleRepository(DocStorageDbContext context)
         : base(context) { }
