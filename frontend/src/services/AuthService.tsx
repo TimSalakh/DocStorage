@@ -1,21 +1,21 @@
 import axios from 'axios'
-import { LoginInputs, RegisterInputs } from '../models/AuthInputsModels'
-import { DataToStore } from '../models/UserDataModels'
+import {
+  ConfirmEmailInputs,
+  LoginInputs,
+  RegisterInputs
+} from '../models/AuthInputsModels'
+import { DataToStore } from '../models/UserModels'
 
-const baseApiUrl: string = 'https://localhost:8888/api/account'
+const baseApiUrl: string = 'https://localhost:443/api/account'
 
 const registerApiCall = async (inputs: RegisterInputs) => {
   try {
     console.log('данные улетели на бэкенд')
-    const response = await axios.post<DataToStore>(
-      `${baseApiUrl}/register`,
-      inputs,
-      {
-        headers: {
-          'Access-Control-Allow-Origin': '*'
-        }
+    const response = await axios.post(`${baseApiUrl}/register`, inputs, {
+      headers: {
+        'Access-Control-Allow-Origin': '*'
       }
-    )
+    })
     return response
   } catch (error) {
     console.error(error)
@@ -24,8 +24,21 @@ const registerApiCall = async (inputs: RegisterInputs) => {
 
 const loginApiCall = async (inputs: LoginInputs) => {
   try {
+    const response = await axios.post(`${baseApiUrl}/login`, inputs, {
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      }
+    })
+    return response
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const confirmEmailApiCall = async (inputs: ConfirmEmailInputs) => {
+  try {
     const response = await axios.post<DataToStore>(
-      `${baseApiUrl}/login`,
+      `${baseApiUrl}/confirm-email`,
       inputs,
       {
         headers: {
@@ -39,4 +52,4 @@ const loginApiCall = async (inputs: LoginInputs) => {
   }
 }
 
-export { registerApiCall, loginApiCall }
+export { registerApiCall, loginApiCall, confirmEmailApiCall }

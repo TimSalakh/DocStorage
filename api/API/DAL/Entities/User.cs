@@ -12,4 +12,5 @@ public class User
     public bool IsEmailConfirmed { get; set; } = false;
     public Guid? RoleId { get; set; }
     public Role? Role { get; set; }
+    public ICollection<ConfirmationCode>? ConfirmationCodes { get; set; }
 }

@@ -17,8 +17,9 @@ public class TokenService : ITokenService
 
     public string GenerateToken(IEnumerable<Claim> claims)
     {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-           _configuration.GetSection("Jwt:SigningKey").Value!));
+        var jwtConfig = _configuration.GetSection("Jwt");
+        var signingKey = jwtConfig.GetValue<string>("SigningKey");
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey!));
 
         var singningCreds = new SigningCredentials(securityKey,
             SecurityAlgorithms.HmacSha512Signature);

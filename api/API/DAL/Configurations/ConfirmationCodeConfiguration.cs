@@ -9,5 +9,11 @@ public class ConfirmationCodeConfiguration : IEntityTypeConfiguration<Confirmati
     public void Configure(EntityTypeBuilder<ConfirmationCode> builder)
     {
         builder.HasKey(cc => cc.Id);
+
+        builder
+            .HasOne(cc => cc.User)
+            .WithMany(u => u.ConfirmationCodes)
+            .HasForeignKey(cc => cc.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

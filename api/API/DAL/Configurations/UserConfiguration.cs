@@ -17,6 +17,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
+            .HasMany(u => u.ConfirmationCodes)
+            .WithOne(cc => cc.User)
+            .HasForeignKey(cc => cc.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
             .Property(u => u.IsEmailConfirmed)
             .HasDefaultValue(false);
 

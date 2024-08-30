@@ -15,29 +15,27 @@ public class AccountService
     private readonly ILogger<AccountController> _logger;
     private readonly ITokenService _tokenService;
     private readonly TwoStepAuthService _twoStepAuthService;
-    private readonly EmailComposerService _emailComposerService;
 
     public AccountService(
         UserRepository userRepository,
         RoleRepository roleRepository,
         ITokenService tokenService,
         ILogger<AccountController> logger,
-        TwoStepAuthService twoStepAuthService,
-        EmailComposerService emailComposerService)
+        TwoStepAuthService twoStepAuthService)
     {
         _userRepository = userRepository;
         _roleRepository = roleRepository;
         _tokenService = tokenService;
         _logger = logger;
         _twoStepAuthService = twoStepAuthService;
-        _emailComposerService = emailComposerService;
     }
 
     public async Task<ServiceResult<string>> RegisterAsync(RegisterDto registerDto)
     {
         var existingUser = await _userRepository.FindByEmailAsync(registerDto.Email);
         if (existingUser != null && existingUser.IsEmailConfirmed)
-            return ServiceResult<string>.Failure("Пользователь с таким почтовым адресом уже существует.");
+            return LogAndReturnError<string>("Такой пользователь уже существует.",
+                "Пользователь с таким почтовым адресом уже существует.");
 
         var newUser = registerDto.ToUserTable();
 
@@ -49,7 +47,10 @@ public class AccountService
         var role = await _roleRepository.FindByNameAsync(receivedRole);
 
         await _userRepository.SetRoleAsync(newUser, role!);
-        await _emailComposerService.SendConfirmationCodeAsync(newUser.Email!);
+        var sendingResult = await _twoStepAuthService.SendConfirmationCodeAsync(newUser);
+
+        if (!sendingResult.Result)
+            return LogAndReturnError<string>("Проблема с кодом подтверждения.", sendingResult.ErrorMessage!);
 
         return ServiceResult<string>.Success("Код подтверждения отправлен по указанному адресу.");
     }
@@ -60,7 +61,10 @@ public class AccountService
         if (user == null || !user.IsEmailConfirmed)
             return LogAndReturnError<string>("Пользователь не найден или у него не подтверждена почта.", "Пользователь не найден.");
 
-        await _emailComposerService.SendConfirmationCodeAsync(user.Email!);
+        var sendingResult = await _twoStepAuthService.SendConfirmationCodeAsync(user);
+
+        if (!sendingResult.Result)
+            return LogAndReturnError<string>("Проблема с кодом подтверждения.", sendingResult.ErrorMessage!);
 
         return ServiceResult<string>.Success("Код подтверждения отправлен по указанному адресу.");
     }
@@ -69,9 +73,9 @@ public class AccountService
     {
         var user = await _userRepository.FindByEmailAsync(confirmEmailDto.Email);
         if (user == null)
-            return LogAndReturnError<DataToStoreDto>("Указан неверный адрес.", "Пользователь не найден.");
+            return LogAndReturnError<DataToStoreDto>("Указан неверный почтовый адрес.", "Пользователь не найден.");
 
-        var validationResult = await _twoStepAuthService.MatchCodesAsync(user.Email!, confirmEmailDto.Code);
+        var validationResult = await _twoStepAuthService.MatchCodesAsync(user, confirmEmailDto.Code);
         if (!validationResult.Result)
             return LogAndReturnError<DataToStoreDto>(validationResult.ErrorMessage!, validationResult.ErrorMessage!);
 

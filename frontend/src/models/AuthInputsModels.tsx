@@ -9,3 +9,8 @@ export type RegisterInputs = {
 export type LoginInputs = {
   email: string
 }
+
+export type ConfirmEmailInputs = {
+  email: string
+  code: string
+}

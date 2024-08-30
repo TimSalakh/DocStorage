@@ -3,6 +3,7 @@ using System;
 using API.DAL.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.dal.migrations
 {
     [DbContext(typeof(DocStorageDbContext))]
-    partial class DocStorageDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240715045419_ConfirmationCode_relations_updated")]
+    partial class ConfirmationCode_relations_updated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,10 +37,11 @@ namespace API.dal.migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("ExpirationTime")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("DestinationEmail")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("NextResendTime")
+                    b.Property<DateTime>("ExpirationTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("UserId")
@@ -70,17 +74,17 @@ namespace API.dal.migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4ed27d5e-0058-4294-84b5-97975bec9cac"),
+                            Id = new Guid("f7babaa4-c56b-4cf7-ae9e-5ebb01ad6cc8"),
                             Name = "Student"
                         },
                         new
                         {
-                            Id = new Guid("8d043ed0-6413-45e7-9535-a77a4f41c394"),
+                            Id = new Guid("852390ee-9a07-4710-a1cd-7eda7e0aae96"),
                             Name = "Teacher"
                         },
                         new
                         {
-                            Id = new Guid("d02ca366-35f4-44eb-b32a-2fb250320364"),
+                            Id = new Guid("409ecef4-8e43-4e14-a0a0-4d4f28f76425"),
                             Name = "Admin"
                         });
                 });
@@ -134,7 +138,7 @@ namespace API.dal.migrations
                     b.HasOne("API.DAL.Entities.User", "User")
                         .WithMany("ConfirmationCodes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("User");
                 });
