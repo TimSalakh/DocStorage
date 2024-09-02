@@ -10,15 +10,17 @@ public class PublicationConfiguration : IEntityTypeConfiguration<Publication>
     {
         builder.HasKey(p => p.Id);
 
-        //builder
-        //    .HasOne(p => p.Author)
-        //    .WithMany(u => u.Publications)
-        //    .OnDelete(DeleteBehavior.SetNull);
+        builder
+            .HasOne(p => p.Author)
+            .WithMany(u => u.Publications)
+            .HasForeignKey(p => p.AuthorId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-        //builder
-        //    .HasOne(p => p.Confirmator)
-        //    .WithMany(u => u.Confirmations)
-        //    .OnDelete(DeleteBehavior.SetNull);
+        builder
+            .HasOne(p => p.Confirmator)
+            .WithMany(u => u.ConfirmedPublications)
+            .HasForeignKey(p => p.ConfirmatorId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .Property(p => p.IsConfirmed)

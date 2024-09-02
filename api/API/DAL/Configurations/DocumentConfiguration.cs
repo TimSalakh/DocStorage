@@ -10,9 +10,9 @@ public class DocumentConfiguration : IEntityTypeConfiguration<Document>
     {
         builder.HasKey(d => d.Id);
 
-        builder
-            .HasOne(d => d.Publication)
-            .WithMany(p => p.Documents)
-            .OnDelete(DeleteBehavior.Cascade);
+        //builder
+        //    .HasOne(d => d.Publication)
+        //    .WithMany(p => p.Documents)
+        //    .OnDelete(DeleteBehavior.Cascade);
     }
 }

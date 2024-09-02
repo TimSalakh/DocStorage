@@ -23,6 +23,18 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
+            .HasMany(u => u.Publications)
+            .WithOne(p => p.Author)
+            .HasForeignKey(p => p.AuthorId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasMany(u => u.ConfirmedPublications)
+            .WithOne(p => p.Confirmator)
+            .HasForeignKey(p => p.ConfirmatorId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
             .Property(u => u.IsEmailConfirmed)
             .HasDefaultValue(false);
 

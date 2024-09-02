@@ -26,8 +26,11 @@ const CreatePublicationPage = () => {
             <option>Курсовая работа</option>
             <option>Реферат</option>
             <option>Самостоятельная работа</option>
+            <option>Лабораторная работа</option>
+            <option>Научная статья</option>
             <option>Эссе</option>
             <option>Сообщение</option>
+            <option>Доклад</option>
           </Select>
         </div>
 

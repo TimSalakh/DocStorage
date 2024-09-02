@@ -46,9 +46,11 @@ builder.Services.AddScoped<IBaseRepository<User>, BaseRepository<User>>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IConfirmationCodeRepository, ConfirmationCodeRepository>();
+builder.Services.AddScoped<IPublicationRepository, PublicationRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ITwoStepAuthService, TwoStepAuthService>();
 builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<PublicationService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 
 builder.Services.AddControllers();

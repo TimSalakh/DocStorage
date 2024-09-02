@@ -9,6 +9,8 @@ public class DocStorageDbContext : DbContext
     public DbSet<User> User { get; set; }
     public DbSet<Role> Role { get; set; }
     public DbSet<ConfirmationCode> ConfirmationCode { get; set; }
+    public DbSet<Publication> Publication { get; set; }
+
 
     public DocStorageDbContext(DbContextOptions<DocStorageDbContext> options)
         : base(options) { }
@@ -19,6 +21,7 @@ public class DocStorageDbContext : DbContext
         builder.ApplyConfiguration(new UserConfiguration());
         builder.ApplyConfiguration(new RoleConfiguration());
         builder.ApplyConfiguration(new ConfirmationCodeConfiguration());
+        builder.ApplyConfiguration(new PublicationConfiguration());
 
         var roles = new List<Role>()
         {

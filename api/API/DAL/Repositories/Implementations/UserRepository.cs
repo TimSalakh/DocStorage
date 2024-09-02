@@ -23,15 +23,13 @@ public class UserRepository : BaseRepository<User>, IUserRepository
             return;
 
         user.IsEmailConfirmed = true;
-        _context.User.Update(user);
-        await _context.SaveChangesAsync();
+        await UpdateAsync(user);
     }
 
     public async Task SetRoleAsync(User user, Role role)
     {
-        user.Role = role; 
-        _context.User.Update(user);
-        await _context.SaveChangesAsync();
+        user.Role = role;
+        await UpdateAsync(user);
     }
 
     public async Task DeleteAsync(string email)

@@ -1,5 +1,4 @@
 ﻿using API.DAL.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.DAL.Repositories.Interfaces;
 

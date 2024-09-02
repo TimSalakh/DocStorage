@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using API.BLL.DTOs.PublicationDto;
+using API.BLL.Services.Implementations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
@@ -6,35 +8,43 @@ namespace API.Controllers;
 [Route("api/publication")]
 public class PublicationController : ControllerBase
 {
-    [HttpGet("publications")]
-    public IActionResult GetPublications()
+    private readonly PublicationService _publicationService;
+
+    public PublicationController(PublicationService publicationService)
     {
-        return Ok(FetchPublications());
+        _publicationService = publicationService;
     }
 
-    private List<Pub> FetchPublications()
+    [HttpPost("create")]
+    public async Task<IActionResult> Create([FromBody] CreatePublicationDto createDto)
     {
-        return new List<Pub>
-        {
-            new Pub { Id = Guid.NewGuid(), Date = "28.07 12:36", Author = "Сергей Белов", Name = "Доклад на тему ML", Type = "Доклад", Description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?,Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?" },
-            new Pub { Id = Guid.NewGuid(), Date = "28.07 12:36", Author = "Сергей Белов", Name = "Доклад на тему ML", Type = "Доклад", Description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?,Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?" },
-            new Pub { Id = Guid.NewGuid(), Date = "28.07 12:36", Author = "Сергей Белов", Name = "Доклад на тему ML", Type = "Доклад", Description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?,Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?" },
-            new Pub { Id = Guid.NewGuid(), Date = "28.07 12:36", Author = "Сергей Белов", Name = "Доклад на тему ML", Type = "Доклад", Description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?,Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?" },
-            new Pub { Id = Guid.NewGuid(), Date = "28.07 12:36", Author = "Сергей Белов", Name = "Доклад на тему ML", Type = "Доклад", Description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?,Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?" },
-            new Pub { Id = Guid.NewGuid(), Date = "28.07 12:36", Author = "Сергей Белов", Name = "Доклад на тему ML", Type = "Доклад", Description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?,Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?" },
-            new Pub { Id = Guid.NewGuid(), Date = "28.07 12:36", Author = "Сергей Белов", Name = "Доклад на тему ML", Type = "Доклад", Description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?,Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?" },
-            new Pub { Id = Guid.NewGuid(), Date = "28.07 12:36", Author = "Сергей Белов", Name = "Доклад на тему ML", Type = "Доклад", Description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?,Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?" },
-            new Pub { Id = Guid.NewGuid(), Date = "28.07 12:36", Author = "Сергей Белов", Name = "Доклад на тему ML", Type = "Доклад", Description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?,Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, eos?" }
-        };
+        var creationResult = await _publicationService.CreatePublicationAsync(createDto);
+        return creationResult.Result ?
+            Created() :
+            BadRequest(new { Error = creationResult.ErrorMessage });
+    }
+
+    [HttpPost("confirm")]
+    public async Task<IActionResult> Confirm([FromBody] ConfirmPublicationDto confirmDto)
+    {
+        var confirmationResult = await _publicationService.ConfirmPublicationAsync(confirmDto);
+        return confirmationResult.Result ?
+            Ok() :
+            BadRequest(new { Error = confirmationResult.ErrorMessage });
+    }
+
+    [HttpGet("fetch/user-id={userId:guid}&sort-option={sortOption:int}")]
+    public async Task<IActionResult> Fetch(Guid userId, int sortOption)
+    {
+        if (!Enum.IsDefined(typeof(SortOption), sortOption))
+            return BadRequest(new { Error = "Invalid sort option value." });
+        
+        var parsedSortOption = (SortOption)sortOption;
+
+        var fetchingResult = await _publicationService.GetUsersPublicationsAsync(userId, parsedSortOption);
+        return fetchingResult.Result
+            ? Ok(fetchingResult.Data)
+            : BadRequest(new { Error = fetchingResult.ErrorMessage });
     }
 }
 
-public class Pub
-{
-    public Guid Id { get; set; }
-    public string Date { get; set; }
-    public string Author { get; set; }
-    public string Name { get; set; }
-    public string Type { get; set; }
-    public string Description { get; set; }
-}

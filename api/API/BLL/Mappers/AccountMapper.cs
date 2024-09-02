@@ -13,7 +13,7 @@ public static class AccountMapper
             Surname = registerDto.Surname,
             Patronymic = registerDto.Patronymic,
             Email = registerDto.Email,
-            CreationDate = DateTime.UtcNow.AddHours(7)
+            CreationTime = DateTime.UtcNow.AddHours(7)
         };
     }
 }

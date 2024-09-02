@@ -1,18 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using API.DAL.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.BLL.DTOs.PublicationDto;
 
 public class CreatePublicationDto
 {
-    [Required(ErrorMessage = "Не может быть пустым.")]
+    [Required]
     public Guid AuthorId { get; set; }
 
-    [Required(ErrorMessage = "Не может быть пустым.")]
+    [Required]
+
     public string Name { get; set; } = null!;
 
-    [Required(ErrorMessage = "Не может быть пустым.")]
-    public string Description { get; set; } = null!;
+    [Required]
+    public PublicationType PublicationType { get; set; }
 
-    [Required(ErrorMessage = "Должен содержать хотя бы один документ.")]
-    public IEnumerable<IFormFile> Documents { get; set; } = null!;
+    [Required]
+    public string Description { get; set; } = null!;
 }
